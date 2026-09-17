@@ -1,0 +1,60 @@
+graph TD
+    %% Actores
+    subgraph Actores
+        Estudiantes["👤 Estudiante"]
+        Adm_Escolares["👤 Escolares"]
+        Direccion["👤 Dirección de Carrera"]
+        Profesores["👤 Profesor"]
+    end
+
+    %% Límite del Sistema
+    subgraph Sistema ["🌐 Sistema de Reinscripción y Gestión Académica"]
+        %% Casos de Uso Comunes
+        UC_Auth((Iniciar Sesión / Log in))
+
+        %% Casos de Uso - Dirección de Carrera
+        UC_Plan((Establecer Plan de Estudios y Materias))
+        UC_Oferta((Configurar Horarios, Cupos y Profesores))
+
+        %% Casos de Uso - Estudiantes
+        UC_Historial((Consultar Historial Académico y Prioridad))
+        UC_Preferencia((Registrar Preferencias de Materias/Grupos))
+        UC_Conflictos((Detectar Traslapes de Horario))
+        UC_HorarioGen((Consultar Horario Final Asignado))
+
+        %% Casos de Uso - Escolares
+        UC_Registros((Administrar y Validar Registros de Reinscripción))
+        UC_Asignacion((Procesar Asignación por Prioridades))
+
+        %% Casos de Uso - Profesores
+        UC_Lista((Consultar Lista de Estudiantes Inscritos))
+    end
+
+    %% Relaciones de los Actores con los Casos de Uso
+    
+    %% Iniciar Sesión (Todos)
+    Estudiantes --> UC_Auth
+    Adm_Escolares --> UC_Auth
+    Direccion --> UC_Auth
+    Profesores --> UC_Auth
+
+    %% Dirección de Carrera
+    Direccion --> UC_Plan
+    Direccion --> UC_Oferta
+
+    %% Estudiantes
+    Estudiantes --> UC_Historial
+    Estudiantes --> UC_Preferencia
+    Estudiantes --> UC_HorarioGen
+
+    %% Escolares
+    Adm_Escolares --> UC_Registros
+    Adm_Escolares --> UC_Asignacion
+
+    %% Profesores
+    Profesores --> UC_Lista
+
+    %% Relaciones avanzadas (Include y Extend)
+    UC_Preferencia -. "<<include>>" .-> UC_Conflictos
+    UC_Asignacion -. "<<include>>" .-> UC_HorarioGen
+    UC_Preferencia -. "<<extend>>" .-> UC_Historial
