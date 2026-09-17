@@ -33,3 +33,54 @@ Un entorno web centralizado donde el estudiante puede consultar su información 
 | **Administración Escolar** | Intermediarios y *bookkeepers* que gestionan los registros, coordinan el proceso y validan la asignación general por prioridades[cite: 1]. |
 | **Profesor** | Consulta la información básica y las listas definitivas de los estudiantes inscritos en sus grupos asignados[cite: 1]. |
 
+# Sistema de Reinscripción y Gestión Académica
+
+## Diagrama de Casos de Uso
+
+```mermaid
+flowchart TD
+    subgraph Actores
+        Estudiantes[Estudiante]
+        Adm_Escolares[Escolares]
+        Direccion[Dirección de Carrera]
+        Profesores[Profesor]
+    end
+
+    subgraph Sistema ["Sistema de Reinscripción y Gestión Académica"]
+        UC_Auth((Iniciar Sesión / Log in))
+
+        UC_Plan((Establecer Plan de Estudios y Materias))
+        UC_Oferta((Configurar Horarios, Cupos y Profesores))
+
+        UC_Historial((Consultar Historial Académico y Prioridad))
+        UC_Preferencia((Registrar Preferencias de Materias/Grupos))
+        UC_Conflictos((Detectar Traslapes de Horario))
+        UC_HorarioGen((Consultar Horario Final Asignado))
+
+        UC_Registros((Administrar y Validar Registros))
+        UC_Asignacion((Procesar Asignación por Prioridades))
+
+        UC_Lista((Consultar Lista de Estudiantes Inscritos))
+    end
+
+    Estudiantes --> UC_Auth
+    Adm_Escolares --> UC_Auth
+    Direccion --> UC_Auth
+    Profesores --> UC_Auth
+
+    Direccion --> UC_Plan
+    Direccion --> UC_Oferta
+
+    Estudiantes --> UC_Historial
+    Estudiantes --> UC_Preferencia
+    Estudiantes --> UC_HorarioGen
+
+    Adm_Escolares --> UC_Registros
+    Adm_Escolares --> UC_Asignacion
+
+    Profesores --> UC_Lista
+
+    UC_Preferencia -. include .-> UC_Conflictos
+    UC_Asignacion -. include .-> UC_HorarioGen
+    UC_Preferencia -. extend .-> UC_Historial
+```
